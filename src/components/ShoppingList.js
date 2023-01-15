@@ -3,12 +3,19 @@ import Item from "./Item";
 
 function ShoppingList({ items }) {
 
-  const [element, setElement] = useState("");
-
-
-  const selectedCategory = () => {
-    setElement("")
+  const [selectCategory, setSelectCategory] = useState("All");
+  function HandleClickEvent(e) {
+    setSelectCategory(e.target.value)
   }
+
+
+  const itemDisplayAfterFilter = items.filter((item) => {
+    if (selectCategory === "All") {
+      return true
+    } else {
+      return item.category === selectCategory
+    }
+  })
 
 
 
@@ -17,7 +24,7 @@ function ShoppingList({ items }) {
   return (
     <div className="ShoppingList">
       <div className="Filter">
-        <select name="filter">
+        <select name="filter" onChange={HandleClickEvent}>
           <option value="All">Filter by category</option>
           <option value="Produce">Produce</option>
           <option value="Dairy">Dairy</option>
@@ -25,7 +32,7 @@ function ShoppingList({ items }) {
         </select>
       </div>
       <ul className="Items">
-        {items.map((item) => (
+        {itemDisplayAfterFilter.map((item) => (
           <Item key={item.id} name={item.name} category={item.category} />
         ))}
       </ul>
